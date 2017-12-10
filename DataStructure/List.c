@@ -21,6 +21,7 @@ int main (void)
 	PNODE pHead = NULL;	//等价于struct Node *pHead = NULL;
 	pHead = create_list();	//创建一个非循环单链表，并将该链表的头节点的地址赋给pHead
 	int len = length_list(pHead);
+	int Val = 0;
 
 	traverse_list(pHead);
 
@@ -30,6 +31,17 @@ int main (void)
 		printf("Linked not empty!\n");
 
 	printf("The length of the linked is: %d\n", len);
+	sort_list(pHead);
+	traverse_list(pHead);
+
+	insert_list(pHead, 4, 33);
+	traverse_list(pHead);
+
+	if (delete_list(pHead, 4, &Val))
+		printf("delete complete!\nthe deleted value is: %d\n", Val);
+	else 
+		printf("delete fail!\n");
+	traverse_list(pHead);
 
 	return 0;
 }
@@ -104,11 +116,85 @@ bool is_empty(PNODE pHead)
 }
 int length_list(PNODE pHead)
 {
-	int cnt;
-	while (NULL == pHead)
+	int cnt = 0;
+	pHead = pHead->pNext;
+	while (NULL != pHead)
 	{
 		cnt++;
 		pHead = pHead->pNext;
 	}
 	return cnt;
+}
+
+void sort_list(PNODE pHead)
+{
+	int i, j, t, len;
+	PNODE p;
+	len = length_list(pHead);
+
+	for (i = 0, pHead = pHead->pNext; i < len-1; i++, pHead = pHead->pNext)
+	{
+		for (j = i+1, p = pHead->pNext; j < len; j++, p = p->pNext)
+		{
+			if (pHead->data > p->data)
+			{
+				t = p->data;
+				p->data = pHead->data;
+				pHead->data = t;
+			}
+
+		}
+	}
+	
+	return;
+}
+
+
+//在pHead所指向链表的第pos个节点的前面插入一个新的节点，该节点的值是val，并且pos的值是从1开始
+bool insert_list(PNODE pHead, int pos, int val)
+{
+	int i = 0;
+	PNODE p = pHead;
+
+	while (NULL != p && i < pos-1)	//如果p节点不为尾节点，则指针停在pos前一个节点。
+	{
+		p = p->pNext;
+		++i;
+	}
+	if (i > pos-1 || NULL == p)	//如果pos <= 0，或p节点是尾节点，则返回错误。
+		return false;
+
+	PNODE pNew = (PNODE)malloc(sizeof(PNODE));
+	if (NULL == pNew)
+	{
+		printf("Dynamic allocated memory fail!\n");
+		exit(-1);
+	}
+	pNew->data = val;
+	PNODE q = p->pNext;
+	p->pNext = pNew;
+	pNew->pNext = q;
+
+	return true;
+}
+
+bool delete_list(PNODE pHead, int pos, int *pVal)
+{
+	int i = 0;
+	PNODE pTmp = NULL;
+	while (NULL != pHead->pNext && i < pos-1)	//指针停在要删除节点的前一个节点，如果待删除节点的指针域为空，则跳出循环
+	{
+		pHead = pHead->pNext;
+		i++;
+	}
+	if (i > pos-1 || NULL == pHead->pNext)		
+		return false;
+
+	pTmp = pHead->pNext;			//将待删除节点的地址放到临时变量
+	*pVal = pHead->pNext->data;		//将待删除节点的值取出来
+	pHead->pNext = pHead->pNext->pNext;	//将待删除节点的下一个节点地址放入待删除节点的前一个节点的指针域中
+
+	free(pTmp);				//释放待删除节点空间
+	pTmp = NULL;
+	return true;
 }
