@@ -2,3 +2,4 @@
 Backup
 *.out
 *.swp
+*.fuse*
