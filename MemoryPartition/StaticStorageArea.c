@@ -4,7 +4,7 @@
 
 char* getStr1()
 {
-	char* p = "abcdefg";
+	char* p = "abcdefg2";
 	return p;
 }
 
