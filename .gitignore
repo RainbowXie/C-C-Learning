@@ -3,3 +3,5 @@ Backup
 *.out
 *.swp
 *.fuse*
+*.o
+*.exe
