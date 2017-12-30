@@ -10,13 +10,14 @@ int main()
 {
 	char* p = "   abcdefg    ";
 	char p1[20] = {0};
-
 	int num = 0;
-	getCount(p, &num);
-	trimSpace(p, p1);
 
-	printf("%s\n", p1);
+	getCount(p, &num);
 	printf("ncount:%d\n", num);
+
+	trimSpace(p, p1);
+	printf("%s\n", p1);
+	printf("%s\n", p);
 
 	return 0;
 }
@@ -68,6 +69,10 @@ int trimSpace(char* str, char* newstr)
 	//从str中从第i位拷贝nCount个字符到newstr中
 	strncpy(newstr, str+i, nCount);
 	newstr[nCount] = '\0';
+
+	//从str中从第i位拷贝nCount个字符到str中，只有当str指向的内存空间可以修改时才能这样拷
+	//strncpy(str, str+i, nCount);
+	//str[nCount] = '\0';
 
 	return 0;
 }
