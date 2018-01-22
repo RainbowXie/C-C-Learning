@@ -22,7 +22,12 @@ int main(int argc, char* argv[], char** env)//env系统配置环境变量信息�
 		"case",
 		"static",
 		"do"
+		"\0"    //指针数组自我结束
 	};
+	
+	//自我结束演示
+	for ( i = 0; NULL != c_keyword[i]; i++)
+        	printf("%s\n", c_keyword[i]);
 
 	searchKeyTable(c_keyword, DIM(c_keyword), "do", &pos);
 
